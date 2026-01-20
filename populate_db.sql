@@ -3,7 +3,7 @@ CREATE TABLE product (
 	name VARCHAR(30),
 	price FLOAT,
 	description TEXT,
-	image BLOB,
+	image MEDIUMBLOB,
 	image_type VARCHAR(50)
 );
 

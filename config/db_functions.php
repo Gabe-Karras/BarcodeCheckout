@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once 'db_connect.php';
 require_once 'db_classes.php';
 
@@ -8,7 +7,8 @@ function get_product_by_code($code) {
 	$conn = get_db_connection();
 	$q = $conn->prepare('SELECT name, price, description, image, image_type FROM product WHERE code=?');
 	$q->bind_param('i', $code);
-	$q_result = $q.execute();
+	$q->execute();
+	$q_result = $q->get_result();
 	if ($q_result->num_rows == 0) {
 		$conn->close();
 		return NULL;
@@ -27,7 +27,9 @@ function add_product($code, $name, $price, $description, $image_name) {
 	$q = $conn->prepare('INSERT INTO product VALUES (?, ?, ?, ?, ?, ?)');
 	$image = file_get_contents($_FILES[$image_name]['tmp_name']);
 	$image_type = $_FILES[$image_name]['type'];
-	$q->bind_param('isdsbs', $code, $name, $price, $description, $image, $image_type);
+	$null = NULL;
+	$q->bind_param('isdsbs', $code, $name, $price, $description, $null, $image_type);
+	$q->send_long_data(4, $image);
 	$q->execute();
 	$conn->close();
 }
@@ -46,7 +48,8 @@ function get_member_by_code($code) {
 	$conn = get_db_connection();
 	$q = $conn->prepare('SELECT phone, name FROM member WHERE code=?');
 	$q->bind_param('i', $code);
-	$q_result = $q.execute();
+	$q->execute();
+	$q_result = $q->get_result();
 	if ($q_result->num_rows == 0) {
 		$conn->close();
 		return NULL;
@@ -64,7 +67,8 @@ function get_member_by_phone($phone) {
 	$conn = get_db_connection();
 	$q = $conn->prepare('SELECT code, name FROM member WHERE phone=?');
 	$q->bind_param('i', $phone);
-	$q_result = $q.execute();
+	$q->execute();
+	$q_result = $q->get_result();
 	if ($q_result->num_rows == 0) {
 		$conn->close();
 		return NULL;

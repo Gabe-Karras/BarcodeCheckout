@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 // Returns a mysqli object connected to a database specified in the .env file
 function get_db_connection() {
 	if (!isset($_SESSION['db_info'])) {
@@ -14,7 +12,7 @@ function get_db_connection() {
 		}
 		
 		// Test connection before storing .env info
-		$conn = new mysqli($env['DB_HOST'], ($env['DB_USER'], ($env['DB_PASS'], ($env['DB_NAME']);
+		$conn = new mysqli($env['DB_HOST'], $env['DB_USER'], $env['DB_PASS'], $env['DB_NAME']);
 		if ($conn->connect_error) {
 			return NULL;
 		}
