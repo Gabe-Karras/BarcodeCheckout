@@ -12,3 +12,5 @@ DB_NAME=[name of schema]
 ```
 ***
 Start the php server with `php -S localhost:8000`. You can then navigate to the beginning page of the program through your browser. (ex: localhost:8000/index.html)
+***
+If you'd like to test that you've set everything up correctly between the php and sql, navigate to `localhost:8000/test_files/input_test.php` and mess around with some stuff!
