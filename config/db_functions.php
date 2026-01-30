@@ -5,7 +5,7 @@ require_once 'db_classes.php';
 // Returns db_classes product object associated with code. Returns NULL if not in database
 function get_product_by_code($code) {
 	$conn = get_db_connection();
-	$q = $conn->prepare('SELECT name, price, description, image, image_type FROM product WHERE code=?');
+	$q = $conn->prepare('SELECT name, main_category, sub_category, image, discount_price, original_price FROM product WHERE code=?');
 	$q->bind_param('i', $code);
 	$q->execute();
 	$q_result = $q->get_result();
@@ -16,7 +16,7 @@ function get_product_by_code($code) {
 	
 	$row = $q_result->fetch_assoc();
 	$result = new Product();
-	$result->set_properties($code, $row['name'], $row['price'], $row['description'], $row['image'], $row['image_type']);
+	$result->set_properties($code, $row['name'], $row['main_category'], $row['sub_category'], $row['image'], $row['discount_price'], $row['original_price']);
 	$conn->close();
 	return $result;
 }
@@ -24,15 +24,12 @@ function get_product_by_code($code) {
 // Adds a product to the database.
 // Returns false if unsuccessful (like if a product with the same code already exists)
 // $image_name refers to the name you give the file upload field in an html form. This function finds the image data with that name
-function add_product($code, $name, $price, $description, $image_name) {
+function add_product($code, $name, $main_category, $sub_category, $image, $discount_price, $original_price) {
 	$conn = get_db_connection();
 	try {
-		$q = $conn->prepare('INSERT INTO product VALUES (?, ?, ?, ?, ?, ?)');
-		$image = file_get_contents($_FILES[$image_name]['tmp_name']);
-		$image_type = $_FILES[$image_name]['type'];
+		$q = $conn->prepare('INSERT INTO product VALUES (?, ?, ?, ?, ?, ?, ?)');
 		$null = NULL;
-		$q->bind_param('isdsbs', $code, $name, $price, $description, $null, $image_type);
-		$q->send_long_data(4, $image);
+		$q->bind_param('issssdd', $code, $name, $main_category, $sub_category, $image, $discount_price, $original_price);
 		$q->execute();
 		$conn->close();
 	} catch (mysqli_sql_exception) {

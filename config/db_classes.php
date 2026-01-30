@@ -2,21 +2,20 @@
 class Product {
 	public $code;
 	public $name;
-	public $price;
-	public $description;
+	public $main_category;
+    public $sub_category;
 	public $image;
-	public $image_type;
+	public $discount_price;
+    public $original_price;
 	
-	function set_properties($code, $name, $price, $description, $image, $image_type) {
+	function set_properties($code, $name, $main_category, $sub_category, $image, $discount_price, $original_price) {
 		$this->code = $code;
 		$this->name = $name;
-		$this->price = $price;
-		$this->description = $description;
-		// This contains the raw binary contents of an image file
-		// You'll have to base64 encode it to embed on a webpage
+		$this->main_category = $main_category;
+		$this->sub_category = $sub_category;
 		$this->image = $image;
-		// This contains a string along the lines of 'image/png' which is required for embedding src image data in html
-		$this->image_type = $image_type;
+        $this->discount_price = $discount_price;
+        $this->original_price = $original_price;
 	}
 }
 
