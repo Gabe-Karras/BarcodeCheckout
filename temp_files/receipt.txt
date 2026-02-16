@@ -1,0 +1,6 @@
+Graph	$29.99
+goofy goober	$349.99
+really expensive!!	$10000
+
+Payment method: card
+Total: $10379.98
