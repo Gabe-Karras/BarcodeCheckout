@@ -61,7 +61,11 @@ session_start();
 <br>
 <form action="generate_receipt.php" method="post">
 	<label for="codes">Product Codes (separate by spaces):</label>
-	<input type="text" id="codes" name="codes"> <br> <br>
+	<input type="text" id="codes" name="codes"> <br>
+	<label for="payment_type">Payment Type:</label>
+	<input type="text" id="payment_type" name="payment_type"> <br>
+	<label for="membership">Membership?</label>
+	<input type="checkbox" id="membership" name="membership"> <br> <br>
 	<button type="submit">Submit</button> <br> <br>
 </form>
 

@@ -1,6 +1,6 @@
 <?php
-require_once 'db_connect.php';
-require_once 'db_classes.php';
+require_once __DIR__ . '/db_connect.php';
+require_once __DIR__ . '/db_classes.php';
 
 // Returns db_classes product object associated with code. Returns NULL if not in database
 function get_product_by_code($code) {
