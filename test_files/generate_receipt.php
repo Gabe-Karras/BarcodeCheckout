@@ -4,7 +4,8 @@ session_start();
 require_once '../config/receipt_functions.php';
 
 $codes = explode(' ', $_POST['codes']);
-generate_receipt($codes, 'card', false);
+generate_receipt($codes, 'card', true);
+download_receipt();
 ?>
 
 <html>
