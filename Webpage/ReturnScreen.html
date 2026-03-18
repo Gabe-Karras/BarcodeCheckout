@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+    <label id="countdown">10</label>
+</body>
+
+<script>
+function goDown() {
+    let label = document.getElementById("countdown");
+    let time = Number(label.textContent);
+    time = time - 1;
+    if (time < 1) {
+        window.location.href = "HomePage.html";
+    }
+    label.textContent = time.toString();
+    setTimeout(goDown, 1000);
+}
+setTimeout(goDown, 1000);
+</script>
