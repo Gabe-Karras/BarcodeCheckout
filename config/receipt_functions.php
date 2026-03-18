@@ -44,7 +44,7 @@ function download_receipt() {
 	$pdf = new FPDF();
 	$pdf->AddPage();
 	$pdf->SetLeftMargin(40);
-	$pdf->Image(__DIR__ . '/../Webpage/Receipt_Image.png', 70, null, null, 30);
+	$pdf->Image(__DIR__ . '/../Webpage/Receipt_Image.png', 65, null, null, 40);
 	$pdf->SetY(50);
 	$pdf->SetFont('courier','',12);
 	$pdf->Write(5, $content);
