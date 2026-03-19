@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>POS System – Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: url("PoS_System_Background.png") no-repeat center center fixed;
+            background-size: cover;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Overlay for readability */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: -1;
+        }
+
+        .title {
+            margin-top: 40px;
+            font-size: 64px;
+            color: white;
+            letter-spacing: 4px;
+        }
+
+        .button-container {
+            margin-bottom: 60px;
+            display: flex;
+            gap: 40px;
+        }
+
+        .btn {
+            padding: 20px 40px;
+            font-size: 22px;
+            min-width: 260px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn-checkout {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-member {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="title">WELCOME</div>
+
+    <div class="button-container">
+        <a href="index.html">
+            <button class="btn btn-checkout">Begin Checkout</button>
+        </a>
+
+        <button class="btn btn-member">Member Login</button>
+    </div>
+
+</body>
+</html>
+
