@@ -75,7 +75,7 @@
     <div class="title">WELCOME</div>
 
     <div class="button-container">
-        <a href="index.html">
+        <a href="index.php">
             <button class="btn btn-checkout">Begin Checkout</button>
         </a>
 

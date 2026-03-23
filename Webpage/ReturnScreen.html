@@ -75,7 +75,7 @@ function goDown() {
     let time = Number(label.textContent);
     time = time - 1;
     if (time < 1) {
-        window.location.href = "HomePage.html";
+        window.location.href = "HomePage.php";
     }
     label.textContent = time.toString();
     setTimeout(goDown, 1000);
