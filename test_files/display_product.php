@@ -2,7 +2,7 @@
 session_start();
 require_once '../config/db_functions.php';
 
-if (add_product($_POST['code'], $_POST['name'], $_POST['price'], $_POST['description'], 'image')) {
+if (add_product($_POST['code'], $_POST['name'], $_POST['description'], '', $_POST['image'], $_POST['price'], $_POST['price'])) {
 	echo 'Product added!';
 } else {
 	echo 'Failed to add.';
@@ -21,10 +21,10 @@ $product = get_product_by_code($_POST['code']);
 if ($product != NULL) {
 	echo 'Code: ' . $_POST['code'] . '<br>
 	Name: ' . $product->name . '<br>
-	Price: ' . $product->price . '<br>
-	Description: ' . $product->description . '<br>';
+	Price: ' . $product->original_price . '<br>
+	Description: ' . $product->main_category . '<br>';
 	$encoded_image = base64_encode($product->image);
-	echo '<image src="data:' . $product->image_type . ';base64,' . $encoded_image . '">';
+	echo "<img src='" . htmlspecialchars($product->image) . "' alt='No Image Available'>";
 } else {
 	echo 'Failed to get product.';
 }

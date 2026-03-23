@@ -22,8 +22,7 @@ function get_product_by_code($code) {
 }
 
 // Adds a product to the database.
-// Returns false if unsuccessful (like if a product with the same code already exists)
-// $image_name refers to the name you give the file upload field in an html form. This function finds the image data with that name
+// Returns false if unsuccessful
 function add_product($code, $name, $main_category, $sub_category, $image, $discount_price, $original_price) {
 	$conn = get_db_connection();
 	try {

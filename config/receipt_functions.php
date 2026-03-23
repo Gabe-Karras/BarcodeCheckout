@@ -13,9 +13,9 @@ function generate_receipt($product_codes, $payment_method, $membership) {
 		$item = get_product_by_code($code);
 		// Constrain name to 30 characters and price to 2 decimal places
 		$content .= sprintf("%-'.35.35s", $item->name);
-		$formatted_price = sprintf("$%.2f", $item->price);
+		$formatted_price = sprintf("$%.2f", $item->original_price);
 		$content .= sprintf(".....%'.10.10s\n", $formatted_price);
-		$total += $item->price;
+		$total += $item->original_price;
 	}
 
 	$savings = 0;

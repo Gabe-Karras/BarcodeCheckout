@@ -16,8 +16,8 @@ session_start();
 	<input type="number" id="price" name="price" min="0" step="0.01"> <br>
 	<label for="description">Description:</label>
 	<input type="text" id="description" name="description"> <br>
-	<label for="image">Image:</label>
-	<input type="file" id="image" name="image" accept="image/*"> <br> <br>
+	<label for="image">Image link:</label>
+	<input type="text" id="image" name="image"> <br> <br>
 	<button type="submit">Submit</button> <br> <br>
 </form>
 
