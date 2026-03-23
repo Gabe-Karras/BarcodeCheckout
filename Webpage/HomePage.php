@@ -1,3 +1,8 @@
+<?php
+session_start();
+session_unset();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,7 +80,7 @@
     <div class="title">WELCOME</div>
 
     <div class="button-container">
-        <a href="index.html">
+        <a href="index.php">
             <button class="btn btn-checkout">Begin Checkout</button>
         </a>
 

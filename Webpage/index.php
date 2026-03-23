@@ -1,8 +1,16 @@
 <?php
 require_once __DIR__ . '/../config/db_functions.php';
+session_start();
+
+if (!isset($_SESSION['items'])) {
+    $_SESSION['items'] = [];
+}
 
 $code = $_GET['code'] ?? null;
 $product = $code ? get_product_by_code($code) : null;
+if ($product != null) {
+    $_SESSION['items'][] = get_product_by_code($code);
+}
 ?>
 
 <!DOCTYPE html>
@@ -123,6 +131,11 @@ $product = $code ? get_product_by_code($code) : null;
             font-size: 20px;
             color: black;
         }
+
+        .fixed-content {
+            height: 500px;
+            overflow-y: scroll;
+        }
     </style>
 </head>
 
@@ -157,7 +170,16 @@ $product = $code ? get_product_by_code($code) : null;
         </div>
 
         <div class="summary">
-            <h2>Summary</h2>
+            <div style="justify-content: flex-start;">
+                <h2>Summary</h2>
+                <div class="fixed-content">
+                    <?php
+                    foreach ($_SESSION['items'] as $item) {
+                        echo '<p style="margin-top: 20px;">' . $item->name . '</p>';
+                    }
+                    ?>
+                </div>
+            </div>
             <button class="btn" onclick="location.href='payment.html'">Pay</button>
         </div>
     </div>
