@@ -158,7 +158,7 @@ $product = $code ? get_product_by_code($code) : null;
 
         <div class="summary">
             <h2>Summary</h2>
-            <button class="btn" onclick="location.href='payment.html'">Pay</button>
+            <button class="btn" onclick="location.href='payment.php'">Pay</button>
         </div>
     </div>
 
