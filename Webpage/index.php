@@ -180,7 +180,7 @@ if ($product != null) {
                     ?>
                 </div>
             </div>
-            <button class="btn" onclick="location.href='payment.html'">Pay</button>
+            <button class="btn" onclick="location.href='payment.php'">Pay</button>
         </div>
     </div>
 
