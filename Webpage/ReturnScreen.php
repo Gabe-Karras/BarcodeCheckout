@@ -1,3 +1,17 @@
+<?php
+require_once __DIR__ . '/../config/db_classes.php';
+require_once __DIR__ . '/../config/receipt_functions.php';
+session_start();
+
+$codes = [];
+foreach($_SESSION['items'] as $item) {
+    $codes[] = $item->code;
+}
+
+generate_receipt($codes, 'cash', false);
+//download_receipt();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -61,11 +75,10 @@
 
 <body>
     <div class="title">THANK YOU FOR SHOPPING WITH US!</div>
-    <div class="text" style="margin-top: 30px;">
-        <label style="margin-right: 10px;">This kiosk will reset in:</label>
-        <label id="countdown" style="color: rgb(245, 209, 5);">10</label>
+    <div class="text" style="margin-top: 40px;">
+        <label style="margin-right: 10px;">This kiosk will reset in</label>
+        <label id="countdown">10</label>
     </div>
-    <button class="btn" style="margin-top: 30px;">Print receipt</button>
 </body>
 
 <script>

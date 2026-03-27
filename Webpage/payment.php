@@ -1,3 +1,8 @@
+<?php
+require_once __DIR__ . '/../config/db_classes.php';
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -382,17 +387,33 @@
             <!-- RIGHT -->
             <aside class="right" aria-label="Cart summary">
                 <div class="cart-head">
-                    <div class="title"><span id="itemCountText">0</span> item(s)</div>
+                    <div class="title"><span id="itemCountText"><?php echo count($_SESSION['items']); ?></span> item(s)</div>
                     <div style="font-size: 12px; color:#666;">Cart</div>
                 </div>
 
-                <div class="cart-items" id="cartItems"></div>
-                <h2>Item's name and price will show up here</h2>
+                <div class="cart-items" id="cartItems">
+                    <?php
+                    foreach ($_SESSION['items'] as $item) {
+                        echo '<p style="margin-top: 20px;">' . $item->name . '<br>$' . $item->original_price . '</p>';
+                    }
+                    ?>
+                </div>
 
                 <div class="totals">
-                    <div class="line"><span>Subtotal</span><span id="subtotalText">$0.00</span></div>
-                    <div class="line"><span>Tax</span><span id="taxText">$0.00</span></div>
-                    <div class="line grand"><span>Total</span><span id="totalText">$0.00</span></div>
+                    <?php
+                    $subtotal = 0;
+                    foreach ($_SESSION['items'] as $item) {
+                        $subtotal += $item->original_price;
+                    }
+                    $_SESSION['subtotal'] = number_format((float)$subtotal, 2, '.', '');
+                    $tax = 0.06 * $subtotal;
+                    $_SESSION['tax'] = number_format((float)$tax, 2, '.', '');
+                    $total = $subtotal + $tax;
+                    $_SESSION['total'] = number_format((float)$total, 2, '.', '');
+                    ?>
+                    <div class="line"><span>Subtotal</span><span id="subtotalText">$<?php echo $_SESSION['subtotal']; ?></span></div>
+                    <div class="line"><span>Tax</span><span id="taxText">$<?php echo $_SESSION['tax']; ?></span></div>
+                    <div class="line grand"><span>Total</span><span id="totalText">$<?php echo $_SESSION['total']; ?></span></div>
                 </div>
             </aside>
         </div>
