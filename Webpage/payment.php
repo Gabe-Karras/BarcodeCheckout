@@ -429,6 +429,7 @@ session_start();
             tileEl.classList.add("selected");
             selectedMethodText.textContent = method;
             localStorage.setItem("payment_method", method);
+            window.location.href = `ReturnScreen.php?method=${encodeURIComponent(method)}`;
         }
 
         tiles.forEach(tile => {

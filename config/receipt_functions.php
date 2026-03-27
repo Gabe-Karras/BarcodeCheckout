@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/db_functions.php';
 require_once __DIR__ . '/../fpdf/fpdf.php';
+session_start();
 
 /* Takes list of product ids being purchased, string method of payment, 
    and boolean if purchase was made with a membership or not 
@@ -31,6 +32,27 @@ function generate_receipt($product_codes, $payment_method, $membership) {
 		$content .= "\nMembership savings: $" . $savings;
 	}
 	$content .= "\nTotal: $" . $total;
+
+	if (file_exists(__DIR__ . '/../temp_files/receipt.txt')) {
+		unlink(__DIR__ . '/../temp_files/receipt.txt');
+	}
+	file_put_contents(__DIR__ . '/../temp_files/receipt.txt', $content);
+}
+
+// Does the same thing as above but uses values already stored in session
+function generate_receipt_from_session() {
+	$content = '';
+	foreach ($_SESSION['items'] as $item) {
+		// Constrain name to 30 characters and price to 2 decimal places
+		$content .= sprintf("%-'.35.35s", $item->name);
+		$formatted_price = sprintf("$%.2f", $item->original_price);
+		$content .= sprintf(".....%'.10.10s\n", $formatted_price);
+	}
+
+	$content .= "\nPayment method: " . $_SESSION['payment_method'];
+	$content .= "\nSubtotal: $" . $_SESSION['subtotal'];
+	$content .= "\nTax: $" . $_SESSION['tax'];
+	$content .= "\nTotal: $" . $_SESSION['total'];
 
 	if (file_exists(__DIR__ . '/../temp_files/receipt.txt')) {
 		unlink(__DIR__ . '/../temp_files/receipt.txt');
