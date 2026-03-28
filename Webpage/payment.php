@@ -342,6 +342,54 @@ session_start();
                 height: 150px;
             }
         }
+
+        .popup {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .popup-content {
+            font-size: 18px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .continue-btn {
+            padding: 10px 15px;
+            font-size: 14px;
+            min-width: 50px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+        }
+
+        .cancel-btn {
+            padding: 10px 15px;
+            font-size: 14px;
+            min-width: 50px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
     </style>
 </head>
 
@@ -355,6 +403,22 @@ session_start();
 
     <div class="screen">
         <div class="content">
+
+            <!-- Payment popups -->
+            <div id="payPopup", class="popup">
+                <div class="popup-content">
+                    <p id="popupText">Pay total with cash?</p>
+                    <span style="margin-top: 10px;">
+                        <button id="cancel-btn" class="cancel-btn">
+                            Cancel
+                        </button>
+                        <button id="continue-btn" class="continue-btn">
+                            Continue
+                        </button>
+                    </span>
+                </div>
+            </div>
+
             <!-- LEFT -->
             <section class="left" aria-label="Payment selection">
                 <h2>Select Payment Type</h2>
@@ -421,6 +485,7 @@ session_start();
 
     <script>
         // ---- Payment Selection ----
+        let currentPayment = "";
         const tiles = Array.from(document.querySelectorAll(".pay-tile"));
         const selectedMethodText = document.getElementById("selectedMethodText");
 
@@ -429,7 +494,7 @@ session_start();
             tileEl.classList.add("selected");
             selectedMethodText.textContent = method;
             localStorage.setItem("payment_method", method);
-            window.location.href = `ReturnScreen.php?method=${encodeURIComponent(method)}`;
+            createPayPopup(method);
         }
 
         tiles.forEach(tile => {
@@ -447,6 +512,28 @@ session_start();
             if (window.history.length > 1) window.history.back();
             else window.location.href = "index.html";
         });
+
+        // ---- Popup management ----
+        const payPopup = document.getElementById("payPopup");
+        const continueBtn = document.getElementById("continue-btn");
+        const cancelBtn = document.getElementById("cancel-btn");
+        const popupText = document.getElementById("popupText");
+
+        cancelBtn.onclick = () => {
+            payPopup.style.display = "none";
+            currentPayment = "";
+        };
+
+        continueBtn.onclick = () => {
+            window.location.href = `ReturnScreen.php?method=${encodeURIComponent(currentPayment)}`;
+        };
+
+        // Dynamically create payment popup with selected method
+        function createPayPopup(method) {
+            currentPayment = method;
+            popupText.textContent = "Pay total with " + method.toLowerCase() + "?";
+            payPopup.style.display = "flex";
+        }
 
     </script>
 </body>
