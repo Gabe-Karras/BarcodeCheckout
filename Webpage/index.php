@@ -2,6 +2,9 @@
 require_once __DIR__ . '/../config/db_functions.php';
 session_start();
 
+// Initialize gift card credit
+$_SESSION['credit'] = 0;
+
 if (!isset($_SESSION['items'])) {
     $_SESSION['items'] = [];
 }
@@ -160,7 +163,7 @@ if ($product != null) {
                 <?php
                 if ($product) {
                     echo "<p><strong>" . htmlspecialchars($product->name) . "</strong></p>";
-                    echo "<p>Price: $" . number_format($product->discount_price, 2) . "</p>";
+                    echo "<p>Price: $" . number_format($product->original_price, 2) . "</p>";
                     echo "<p>Main Category: " . htmlspecialchars($product->main_category) . "</p>";
                 } else {
                     echo "<p>Scan an item to see its details here</p>";

@@ -1,7 +1,9 @@
 <?php
 // Get payment method from url and put it in the session
 session_start();
-$_SESSION['payment_method'] = $_GET['method'];
+if (isset($_GET['method'])) {
+    $_SESSION['payment_method'] = $_GET['method'];
+}
 ?>
 
 <!DOCTYPE html>

@@ -49,10 +49,18 @@ function generate_receipt_from_session() {
 		$content .= sprintf(".....%'.10.10s\n", $formatted_price);
 	}
 
-	$content .= "\nPayment method: " . $_SESSION['payment_method'];
+	if (isset($_SESSION['payment_method'])) {
+		$content .= "\nPayment method: " . $_SESSION['payment_method'];
+	} else {
+		$content .= "\nPayment method: Gift Card";
+	}
 	$content .= "\nSubtotal: $" . $_SESSION['subtotal'];
 	$content .= "\nTax: $" . $_SESSION['tax'];
-	$content .= "\nTotal: $" . $_SESSION['total'];
+	if (isset($_SESSION['payment_method']) && $_SESSION['credit'] > 0) {
+		$content .= "\nStore Credit: $" . $_SESSION['credit'];
+	}
+
+	$content .= "\n\nTotal: $" . $_SESSION['total'];
 
 	if (file_exists(__DIR__ . '/../temp_files/receipt.txt')) {
 		unlink(__DIR__ . '/../temp_files/receipt.txt');
