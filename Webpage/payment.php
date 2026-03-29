@@ -1,6 +1,31 @@
 <?php
 require_once __DIR__ . '/../config/db_classes.php';
 session_start();
+
+// Add any gift card credit on for submission
+if (isset($_POST['amount'])) {
+    $_SESSION['credit'] += $_POST['amount'];
+    $_SESSION['credit'] = number_format((float)$_SESSION['credit'], 2, '.', '');
+}
+
+$subtotal = 0;
+foreach ($_SESSION['items'] as $item) {
+    $subtotal += $item->original_price;
+}
+$_SESSION['subtotal'] = number_format((float)$subtotal, 2, '.', '');
+$tax = 0.06 * $subtotal;
+$_SESSION['tax'] = number_format((float)$tax, 2, '.', '');
+$total = $subtotal + $tax;
+$total -= $_SESSION['credit'];
+if ($total < 0) {
+    $total = 0;
+}
+$_SESSION['total'] = number_format((float)$total, 2, '.', '');
+// Finish purchase if credit card funds exceed total
+if ($_SESSION['total'] == 0) {
+    header('Location: ReturnScreen.php');
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -342,6 +367,54 @@ session_start();
                 height: 150px;
             }
         }
+
+        .popup {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .popup-content {
+            font-size: 18px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .continue-btn {
+            padding: 10px 15px;
+            font-size: 14px;
+            min-width: 50px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+        }
+
+        .cancel-btn {
+            padding: 10px 15px;
+            font-size: 14px;
+            min-width: 50px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
     </style>
 </head>
 
@@ -355,6 +428,40 @@ session_start();
 
     <div class="screen">
         <div class="content">
+
+            <!-- Payment popups -->
+            <div id="payPopup", class="popup">
+                <div class="popup-content">
+                    <p id="popupText">Pay total with cash?</p>
+                    <span style="margin-top: 10px;">
+                        <button id="cancelBtn" class="cancel-btn">
+                            Cancel
+                        </button>
+                        <button id="continueBtn" class="continue-btn">
+                            Continue
+                        </button>
+                    </span>
+                </div>
+            </div>
+
+            <div id="giftPopup", class="popup">
+                <div class="popup-content" style="width: 400px;">
+                    <form method="post" action="payment.php">
+                        <label for="amount">Enter gift card amount ($):</label>
+                        <input type="number" id="giftAmount" name="amount" style="font-size: 18px; width: 5em;" required>
+                        <br>
+                        <span style="margin-top: 10px;">
+                            <button id="giftCancelBtn" class="cancel-btn">
+                                Cancel
+                            </button>
+                            <button class="continue-btn" type="submit">
+                                Continue
+                            </button>
+                        </span>
+                    </form>
+                </div>
+            </div>
+
             <!-- LEFT -->
             <section class="left" aria-label="Payment selection">
                 <h2>Select Payment Type</h2>
@@ -396,21 +503,14 @@ session_start();
                     foreach ($_SESSION['items'] as $item) {
                         echo '<p style="margin-top: 20px;">' . $item->name . '<br>$' . $item->original_price . '</p>';
                     }
+
+                    if ($_SESSION['credit'] > 0) {
+                        echo '<p style="margin-top: 20px; color: green;">Store Credit<br>$' . $_SESSION['credit'] . '</p>';
+                    }
                     ?>
                 </div>
 
                 <div class="totals">
-                    <?php
-                    $subtotal = 0;
-                    foreach ($_SESSION['items'] as $item) {
-                        $subtotal += $item->original_price;
-                    }
-                    $_SESSION['subtotal'] = number_format((float)$subtotal, 2, '.', '');
-                    $tax = 0.06 * $subtotal;
-                    $_SESSION['tax'] = number_format((float)$tax, 2, '.', '');
-                    $total = $subtotal + $tax;
-                    $_SESSION['total'] = number_format((float)$total, 2, '.', '');
-                    ?>
                     <div class="line"><span>Subtotal</span><span id="subtotalText">$<?php echo $_SESSION['subtotal']; ?></span></div>
                     <div class="line"><span>Tax</span><span id="taxText">$<?php echo $_SESSION['tax']; ?></span></div>
                     <div class="line grand"><span>Total</span><span id="totalText">$<?php echo $_SESSION['total']; ?></span></div>
@@ -421,6 +521,7 @@ session_start();
 
     <script>
         // ---- Payment Selection ----
+        let currentPayment = "";
         const tiles = Array.from(document.querySelectorAll(".pay-tile"));
         const selectedMethodText = document.getElementById("selectedMethodText");
 
@@ -429,6 +530,11 @@ session_start();
             tileEl.classList.add("selected");
             selectedMethodText.textContent = method;
             localStorage.setItem("payment_method", method);
+            if (method === "Gift Card") {
+                giftPopup.style.display = "flex";
+            } else {
+                createPayPopup(method);
+            }
         }
 
         tiles.forEach(tile => {
@@ -443,9 +549,38 @@ session_start();
 
         // ---- Back button ----
         document.getElementById("goBackBtn").addEventListener("click", () => {
-            if (window.history.length > 1) window.history.back();
-            else window.location.href = "index.html";
+            window.location.href = "index.php";
         });
+
+        // ---- Popup management ----
+        const payPopup = document.getElementById("payPopup");
+        const continueBtn = document.getElementById("continueBtn");
+        const cancelBtn = document.getElementById("cancelBtn");
+        const popupText = document.getElementById("popupText");
+        const giftPopup = document.getElementById("giftPopup");
+        const giftAmount = document.getElementById("giftAmount");
+        const giftCancelBtn =document.getElementById("giftCancelBtn");
+
+        cancelBtn.onclick = () => {
+            payPopup.style.display = "none";
+            currentPayment = "";
+        };
+
+        continueBtn.onclick = () => {
+            window.location.href = `ReturnScreen.php?method=${encodeURIComponent(currentPayment)}`;
+        };
+
+        giftCancelBtn.onclick = () => {
+            giftAmount.value = "";
+            giftPopup.style.display = "none";
+        };
+
+        // Dynamically create payment popup with selected method
+        function createPayPopup(method) {
+            currentPayment = method;
+            popupText.textContent = "Pay total with " + method.toLowerCase() + "?";
+            payPopup.style.display = "flex";
+        }
 
     </script>
 </body>

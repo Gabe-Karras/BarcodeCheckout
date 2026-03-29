@@ -1,15 +1,9 @@
 <?php
-require_once __DIR__ . '/../config/db_classes.php';
-require_once __DIR__ . '/../config/receipt_functions.php';
+// Get payment method from url and put it in the session
 session_start();
-
-$codes = [];
-foreach($_SESSION['items'] as $item) {
-    $codes[] = $item->code;
+if (isset($_GET['method'])) {
+    $_SESSION['payment_method'] = $_GET['method'];
 }
-
-generate_receipt($codes, 'cash', false);
-//download_receipt();
 ?>
 
 <!DOCTYPE html>
@@ -61,14 +55,18 @@ generate_receipt($codes, 'cash', false);
         }
 
         .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px 40px;
-            font-size: 22px;
+            font-size: 26px;
             min-width: 260px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             background-color: #28a745;
             color: white;
+            margin-top: 60px;
         }
     </style>
 </head>
@@ -79,6 +77,7 @@ generate_receipt($codes, 'cash', false);
         <label style="margin-right: 10px;">This kiosk will reset in</label>
         <label id="countdown">10</label>
     </div>
+    <a class="btn" href="PrintReceipt.php">Print Receipt</a>
 </body>
 
 <script>
