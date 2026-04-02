@@ -21,15 +21,22 @@ function get_product_by_code($code) {
 	return $result;
 }
 
-// Adds a product to the database.
+// Adds a product to the database. Will overwrite if code is already in use.
 // Returns false if unsuccessful
 function add_product($code, $name, $main_category, $sub_category, $image, $discount_price, $original_price) {
 	$conn = get_db_connection();
 	try {
-		$q = $conn->prepare('INSERT INTO product VALUES (?, ?, ?, ?, ?, ?, ?)');
-		$null = NULL;
-		$q->bind_param('issssdd', $code, $name, $main_category, $sub_category, $image, $discount_price, $original_price);
-		$q->execute();
+		if (get_product_by_code($code)) {
+			$q = $conn->prepare('UPDATE product SET name=?, main_category=?, sub_category=?, image=?, discount_price=?, original_price=? WHERE code=?');
+			$null = NULL;
+			$q->bind_param('ssssddi', $name, $main_category, $sub_category, $image, $discount_price, $original_price, $code);
+			$q->execute();
+		} else {
+			$q = $conn->prepare('INSERT INTO product VALUES (?, ?, ?, ?, ?, ?, ?)');
+			$null = NULL;
+			$q->bind_param('issssdd', $code, $name, $main_category, $sub_category, $image, $discount_price, $original_price);
+			$q->execute();
+		}
 		$conn->close();
 	} catch (mysqli_sql_exception) {
 		$conn->close();

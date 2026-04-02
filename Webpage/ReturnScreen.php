@@ -87,9 +87,6 @@ function goDown() {
     let time = Number(label.textContent);
     time = time - 1;
     if (time < 1) {
-        <?php
-        unset($_SESSION['payment_method']);
-        ?>
         window.location.href = "HomePage.php";
     }
     label.textContent = time.toString();
