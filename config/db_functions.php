@@ -2,6 +2,23 @@
 require_once __DIR__ . '/db_connect.php';
 require_once __DIR__ . '/db_classes.php';
 
+if (isset($_POST['action']) && $_POST['action'] == 'add_product') {
+	$code = $_POST['code'];
+	$name = $_POST['name'];
+	$main_category = $_POST['main_category'];
+	$sub_category = $_POST['sub_category'];
+	$image = $_POST['image'];
+	$discount_price = floatval($_POST['discount_price']);
+	$original_price = floatval($_POST['original_price']);
+	add_product($code, $name, $main_category, $sub_category, $image, $discount_price, $original_price);
+}
+else if (isset($_POST['action']) && $_POST['action'] == 'add_member') {
+	$code = $_POST['member_id'];
+	$phone = $_POST['phone'];
+	$name = $_POST['name'];
+	add_member($code, $phone, $name);
+}
+
 // Returns db_classes product object associated with code. Returns NULL if not in database
 function get_product_by_code($code) {
 	$conn = get_db_connection();
