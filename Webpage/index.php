@@ -139,6 +139,49 @@ if ($product != null) {
             height: 500px;
             overflow-y: scroll;
         }
+        .blue-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer; 
+            background-color: 
+            #0080ff; 
+            color: white; 
+            border: none; 
+            border-radius: 8px;
+        }
+        .green-btn {
+            cursor:pointer;
+            width: 100%; 
+            padding: 10px; 
+            font-size: 16px; 
+            background-color: #28a745; 
+            color: white; 
+            border: none; 
+            border-radius: 8px;
+        }
+        .red-btn {
+            cursor:pointer; 
+            margin-top: 10px; 
+            width: 100%; 
+            padding: 10px; 
+            font-size: 16px; 
+            background-color: #dc3545; 
+            color: white; 
+            border: none; 
+            border-radius: 8px;
+        }
+        .blue-btn:hover {
+            background-color: #0453ba;
+        }
+        .red-btn:hover {
+            background-color: #b50719;
+        }
+        .green-btn:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 
@@ -146,6 +189,32 @@ if ($product != null) {
 
     <header class="header">
         <h1>Checkout</h1>
+        <button type="button" class="blue-btn" onClick="openForm()" >Add Item</button>
+        <div class="popup" id="popupForm" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.5); z-index: 100;">
+            <h2>Add Item</h2>
+            <form method="POST" action="db_functions.php">
+                <input type="text" name="code" placeholder="Enter product code" style="width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px;">
+                <input type="text" name="name" placeholder="Enter product name" style="width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px;">
+                <input type="text" name="main_category" placeholder="Enter main category" style="width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px;">
+                <input type="text" name="sub_category" placeholder="Enter sub category" style="width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px;">
+                <input type="text" name="image" placeholder="Enter image URL" style="width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px;">
+                <input type="text" name="discount_price" placeholder="Enter product discount price" style="width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px;">
+                <input type="text" name="original_price" placeholder="Enter product original price" style="width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px;">
+                <button type="submit" class="green-btn"name="action" value="add_product">Add Item</button>
+            </form>
+            <button type="button" class="red-btn" onClick="closeForm()">Close</button>
+        </div>
+        <button type="button" class="blue-btn" onClick="openPForm()" style="right: 140px;">Add Member</button>
+        <div class="popup" id="popupPForm" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.5); z-index: 100;">
+            <h2>Add Member</h2>
+            <form method="POST" action="db_functions.php">
+                <input type="text" name="member_id" placeholder="Enter member ID" style="width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px;">
+                <input type="text" name="name" placeholder="Enter member name" style="width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px;">
+                <input type="text" name="phone" placeholder="Enter member phone number" style="width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px;">
+                <button type="submit" class="green-btn"name="action" value="add_member">Add Member</button>
+            </form>
+            <button type="button" class="red-btn" onClick="closePForm()">Close</button>
+        
     </header>
 
     <div class="main">
@@ -192,6 +261,22 @@ if ($product != null) {
     </form>
 
 </body>
+<script>
+    function openForm() {
+        document.getElementById("popupForm").style.display = "block";
+    }
+
+    function closeForm() {
+        document.getElementById("popupForm").style.display = "none";
+    }
+    function openPForm() {
+        document.getElementById("popupPForm").style.display = "block";
+    }
+
+    function closePForm() {
+        document.getElementById("popupPForm").style.display = "none";
+    }
+</script>
 </html>
 
 
