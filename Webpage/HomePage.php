@@ -84,7 +84,9 @@ session_unset();
             <button class="btn btn-checkout">Begin Checkout</button>
         </a>
 
-        <button class="btn btn-member">Member Login</button>
+        <a href="index.php">
+            <button class="btn btn-member">Member Login</button>
+        </a>
     </div>
 
 </body>

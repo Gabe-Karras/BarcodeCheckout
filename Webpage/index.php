@@ -101,10 +101,15 @@ if ($product != null) {
             background: rgba(255, 255, 255, 0.1);
             color: white;
             border-radius: 8px;
+            position: fixed;
+            right: 1%;
+            bottom: 1%;
+            
         }
 
         .btn {
-            padding: 20px 40px;
+            margin-top: 10px;
+            padding: 10px 40px;
             font-size: 22px;
             cursor: pointer;
             background-color: #28a745;
@@ -136,8 +141,8 @@ if ($product != null) {
         }
 
         .fixed-content {
-            height: 500px;
-            overflow-y: scroll;
+            height: 470px;
+            overflow-y: auto;
         }
         .blue-btn {
             position: absolute;
@@ -185,7 +190,7 @@ if ($product != null) {
     </style>
 </head>
 
-<body>
+<body Style="overflow-y: hidden; Height:100%">
 
     <header class="header">
         <h1>Checkout</h1>
@@ -250,6 +255,7 @@ if ($product != null) {
                         echo '<p style="margin-top: 20px;">' . $item->name . '</p>';
                     }
                     ?>
+                    
                 </div>
             </div>
             <button class="btn" onclick="location.href='payment.php'">Pay</button>
