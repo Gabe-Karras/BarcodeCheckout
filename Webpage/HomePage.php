@@ -72,6 +72,54 @@ session_unset();
             background-color: #007bff;
             color: white;
         }
+
+        .popup {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .popup-content {
+            font-size: 18px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .continue-btn {
+            padding: 10px 15px;
+            font-size: 14px;
+            min-width: 50px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+        }
+
+        .cancel-btn {
+            padding: 10px 15px;
+            font-size: 14px;
+            min-width: 50px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
     </style>
 </head>
 
@@ -85,6 +133,35 @@ session_unset();
         </a>
 
         <button class="btn btn-member">Member Login</button>
+    </div>
+
+    <!-- Popups for membership login -->
+    <div id="memberPopup", class="popup">
+        <div class="popup-content" style="width: 400px; height: 180px;">
+            <form method="post" action="HomePage.php" style="text-align: center;">
+                <label for="code">Scan membership card:</label>
+                <input type="text" id="memberCode" name="code" style="font-size: 18px; width: 9em;">
+                <p>OR</p>
+                <label for="phone">Enter phone number:</label>
+                <input type="text" id="memberPhone" name="phone" style="font-size: 18px; width: 10em;">
+                <br>
+                <br>
+                <span style="margin-top: 10px;">
+                    <button id="cancelBtn" class="cancel-btn">
+                        Cancel
+                    </button>
+                    <button class="continue-btn" type="submit">
+                        Continue
+                    </button>
+                </span>
+            </form>
+        </div>
+    </div>
+
+    <div id="successPopup", class="popup", style="display: flex;">
+        <div class="popup-content", style="height: 75px;">
+            <p>Welcome back, !</p>
+        </div>
     </div>
 
 </body>
