@@ -61,6 +61,9 @@ function generate_receipt_from_session() {
 	}
 
 	$content .= "\n\nTotal: $" . $_SESSION['total'];
+	if (isset($_SESSION['membership'])) {
+		$content.= "\nMember Savings: $" . $_SESSION['discount'];
+	}
 
 	if (file_exists(__DIR__ . '/../temp_files/receipt.txt')) {
 		unlink(__DIR__ . '/../temp_files/receipt.txt');
