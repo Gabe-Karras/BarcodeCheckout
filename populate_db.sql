@@ -1,5 +1,5 @@
 CREATE TABLE product (
-code INT AUTO_INCREMENT PRIMARY KEY,
+code BIGINT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(255),
 main_category VARCHAR(100),
 sub_category VARCHAR(100),
@@ -9,7 +9,7 @@ original_price DECIMAL(12,2)
 );
 
 CREATE TABLE member (
-	code INT PRIMARY KEY,
+	code BIGINT PRIMARY KEY,
 	phone INT NOT NULL UNIQUE,
 	name VARCHAR(20)
 );

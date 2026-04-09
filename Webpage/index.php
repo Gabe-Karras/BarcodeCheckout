@@ -194,7 +194,7 @@ if ($product != null) {
             <h2>Add Item</h2>
             <form method="POST" action="db_functions.php">
                 <input type="text" name="code" placeholder="Enter product code" style="width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px;">
-                <input type="text" name="name" placeholder="Enter product name" style="width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px;">
+                <input type="text" name="name" placeholder="Enter product name" style="width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px;" required>
                 <input type="text" name="main_category" placeholder="Enter main category" style="width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px;">
                 <input type="text" name="sub_category" placeholder="Enter sub category" style="width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px;">
                 <input type="text" name="image" placeholder="Enter image URL" style="width: 100%; padding: 10px; margin-bottom: 10px; font-size: 16px;">
