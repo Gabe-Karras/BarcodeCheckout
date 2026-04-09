@@ -1,6 +1,28 @@
 <?php
 session_start();
 session_unset();
+require_once __DIR__ . '/../config/db_functions.php';
+
+// Leave name empty if no membership is queried
+// Set name to * if query fails
+// name contains actual value if query is successful
+$name = "";
+$member = NULL;
+if (isset($_POST['code'])) {
+    $member = get_member_by_code($_POST['code']);
+    if ($member == NULL) {
+        $member = get_member_by_phone($_POST['phone']);
+        if ($member == NULL) {
+            $name = "*";
+        } else {
+            $name = $member->name;
+            $_SESSION['membership'] = true;
+        }
+    } else {
+        $name = $member->name;
+        $_SESSION['membership'] = true;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -132,12 +154,13 @@ session_unset();
             <button class="btn btn-checkout">Begin Checkout</button>
         </a>
 
-        <button class="btn btn-member">Member Login</button>
+        <button class="btn btn-member" id="memberBtn">Member Login</button>
     </div>
 
     <!-- Popups for membership login -->
     <div id="memberPopup", class="popup">
         <div class="popup-content" style="width: 400px; height: 180px;">
+            <p style="display: none; color: #ff9500;" id="failMessage">Membership not found!!</p>
             <form method="post" action="HomePage.php" style="text-align: center;">
                 <label for="code">Scan membership card:</label>
                 <input type="text" id="memberCode" name="code" style="font-size: 18px; width: 9em;">
@@ -147,7 +170,7 @@ session_unset();
                 <br>
                 <br>
                 <span style="margin-top: 10px;">
-                    <button id="cancelBtn" class="cancel-btn">
+                    <button id="cancelBtn" class="cancel-btn" type="button">
                         Cancel
                     </button>
                     <button class="continue-btn" type="submit">
@@ -158,11 +181,49 @@ session_unset();
         </div>
     </div>
 
-    <div id="successPopup", class="popup", style="display: flex;">
+    <div id="successPopup", class="popup">
         <div class="popup-content", style="height: 75px;">
-            <p>Welcome back, !</p>
+            <p>Welcome back, <?php echo $name ?>!</p>
         </div>
     </div>
+
+    <script>
+        const memberBtn = document.getElementById("memberBtn");
+        const memberPopup = document.getElementById("memberPopup");
+        const memberCode = document.getElementById("memberCode");
+        const memberPhone = document.getElementById("memberPhone");
+        const cancelBtn = document.getElementById("cancelBtn");
+        const successPopup = document.getElementById("successPopup");
+        const failMessage = document.getElementById("failMessage");
+
+        // Decide to show popups if membership was queried
+        const name = "<?php echo $name ?>";
+        if (name == "*") {
+            memberPopup.style.display = "flex";
+            failMessage.style.display = "block";
+        } else if (name != "") {
+            successPopup.style.display = "flex";
+            setTimeout(nextPage, 3000);
+        }
+
+        memberBtn.onclick = () => {
+            memberPopup.style.display = "flex";
+            memberCode.focus();
+        }
+
+        cancelBtn.onclick = () => {
+            memberCode.value = "";
+            memberPhone.value = "";
+            memberPopup.style.display = "none";
+            failMessage.style.display = "none";
+        }
+
+        // Function to proceed to the checkout page.
+        // To be called by setTimeout
+        function nextPage() {
+            window.location.href = "index.php";
+        }
+    </script>
 
 </body>
 </html>
