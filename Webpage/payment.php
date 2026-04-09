@@ -16,6 +16,11 @@ $_SESSION['subtotal'] = number_format((float)$subtotal, 2, '.', '');
 $tax = 0.06 * $subtotal;
 $_SESSION['tax'] = number_format((float)$tax, 2, '.', '');
 $total = $subtotal + $tax;
+$discount = $total * 0.02;
+$_SESSION['discount'] = number_format((float)$discount, 2, '.', '');
+if (isset($_SESSION['membership'])) {
+    $total -= $discount;
+}
 $total -= $_SESSION['credit'];
 if ($total < 0) {
     $total = 0;
@@ -451,7 +456,7 @@ if ($_SESSION['total'] == 0) {
                         <input type="number" id="giftAmount" name="amount" style="font-size: 18px; width: 5em;" required>
                         <br>
                         <span style="margin-top: 10px;">
-                            <button id="giftCancelBtn" class="cancel-btn">
+                            <button id="giftCancelBtn" class="cancel-btn" type="button">
                                 Cancel
                             </button>
                             <button class="continue-btn" type="submit">
@@ -502,6 +507,10 @@ if ($_SESSION['total'] == 0) {
                     <?php
                     foreach ($_SESSION['items'] as $item) {
                         echo '<p style="margin-top: 20px;">' . $item->name . '<br>$' . $item->original_price . '</p>';
+                    }
+
+                    if (isset($_SESSION['membership'])) {
+                        echo '<p style="margin-top: 20px; color: green;">Membership Discount<br>$' . $_SESSION['discount'] . '</p>';
                     }
 
                     if ($_SESSION['credit'] > 0) {

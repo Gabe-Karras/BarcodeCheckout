@@ -85,39 +85,49 @@ function remove_product_by_code($code) {
 // Returns db_classes member object associated with code. Returns NULL if not in database
 function get_member_by_code($code) {
 	$conn = get_db_connection();
-	$q = $conn->prepare('SELECT phone, name FROM member WHERE code=?');
-	$q->bind_param('i', $code);
-	$q->execute();
-	$q_result = $q->get_result();
-	if ($q_result->num_rows == 0) {
+	try {
+		$q = $conn->prepare('SELECT phone, name FROM member WHERE code=?');
+		$q->bind_param('i', $code);
+		$q->execute();
+		$q_result = $q->get_result();
+		if ($q_result->num_rows == 0) {
+			$conn->close();
+			return NULL;
+		}
+	
+		$row = $q_result->fetch_assoc();
+		$result = new Member();
+		$result->set_properties($code, $row['phone'], $row['name']);
+		$conn->close();
+		return $result;
+	} catch (mysqli_sql_exception) {
 		$conn->close();
 		return NULL;
 	}
-	
-	$row = $q_result->fetch_assoc();
-	$result = new Member();
-	$result->set_properties($code, $row['phone'], $row['name']);
-	$conn->close();
-	return $result;
 }
 
 // Returns db_classes member object associated with phone number. Returns NULL if not in database
 function get_member_by_phone($phone) {
 	$conn = get_db_connection();
-	$q = $conn->prepare('SELECT code, name FROM member WHERE phone=?');
-	$q->bind_param('i', $phone);
-	$q->execute();
-	$q_result = $q->get_result();
-	if ($q_result->num_rows == 0) {
+	try {
+		$q = $conn->prepare('SELECT code, name FROM member WHERE phone=?');
+		$q->bind_param('i', $phone);
+		$q->execute();
+		$q_result = $q->get_result();
+		if ($q_result->num_rows == 0) {
+			$conn->close();
+			return NULL;
+		}
+	
+		$row = $q_result->fetch_assoc();
+		$result = new Member();
+		$result->set_properties($row['code'], $phone, $row['name']);
+		$conn->close();
+		return $result;
+	} catch (mysqli_sql_exception) {
 		$conn->close();
 		return NULL;
 	}
-	
-	$row = $q_result->fetch_assoc();
-	$result = new Member();
-	$result->set_properties($row['code'], $phone, $row['name']);
-	$conn->close();
-	return $result;
 }
 
 // Adds a member to the database
